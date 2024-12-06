@@ -3,9 +3,12 @@ const fs = require('fs') //to manipulate system files
 const connection = require('../db/connection.js')
 
 const index = (req,res) => {
-  res.status(200).json({
-    data: posts,
-    counter: posts.length
+
+  const sql = `SELECT * FROM posts` //Select all from posts
+
+  connection.query(sql,(err, results) =>{
+    if(err) return res.status(500).json({ Error: err }) //if there is an error it would return the error
+    res.status(200).json({data: results}) // return data
   })
 }
 
