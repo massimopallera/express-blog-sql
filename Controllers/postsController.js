@@ -1,5 +1,6 @@
 const posts = require('../db/posts.js') // database
 const fs = require('fs') //to manipulate system files
+const connection = require('../db/connection.js')
 
 const index = (req,res) => {
   res.status(200).json({
