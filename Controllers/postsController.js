@@ -1,14 +1,18 @@
-const posts = require('../db/posts.js') // database
-const fs = require('fs') //to manipulate system files
+// const posts = require('../db/posts.js') // old database
+// const fs = require('fs') //to manipulate system files //With sql-db is not necessary
 const connection = require('../db/connection.js')
 
 const index = (req,res) => {
 
-  const sql = `SELECT * FROM posts` //Select all from posts
+  const query = `SELECT * FROM posts` //Select all from posts
 
-  connection.query(sql,(err, results) =>{
-    if(err) return res.status(500).json({ Error: err }) //if there is an error it would return the error
-    res.status(200).json({data: results}) // return data
+  connection.query(query,(err, results) =>{
+
+    //if there is an error it would return the error
+    if(err) return res.status(500).json({ Error: err }) 
+
+    //return data
+    res.status(200).json({data: results}) 
   })
 }
 
@@ -17,11 +21,15 @@ const show = (req,res) => {
 
   //get params
   const id = req.params.id
-  //make query
-  // const query = `SELECT * FROM posts WHERE ID = ?` //return just posts
 
+  //make query
+  //const query = `SELECT * FROM posts WHERE ID = ?` //return just posts
+
+
+  //GROUP_CONCAT concatenate values from multiple rows
+  //In that case, is used to group tags
   const query = `
-  SELECT p.*, GROUP_CONCAT(t.label SEPARATOR ',') AS tags
+  SELECT p.*, GROUP_CONCAT(t.label SEPARATOR ', ') AS tags 
   FROM post_tag AS pt  
   JOIN tags AS t ON pt.tag_id = t.id
   JOIN posts AS p ON pt.post_id = p.id
@@ -34,27 +42,15 @@ const show = (req,res) => {
   connection.query(query, [id], (err, results) =>{
 
     if(err) return res.status(500).json({Error: err})
+
     //control if element exists. If elements doesn't exist, return 404
     if(!results[0]) return res.status(404).json({results : "404 Not Found"})
+
     //return element
     res.status(200).json({result : results})
 
   })
 
-}
-
-const printByTag = (req, res) => {
-  const tag = req.params.tag
-
-  //filters posts with that specific tag
-  const postsWTag = posts.filter( element => element.tags.includes(tag))
-
-  // res.send(postsWTag)
-
-  res.status(200).json({
-    tag,
-    posts: postsWTag
-  })
 }
 
 const store =(req,res) => {
@@ -116,15 +112,20 @@ const destroy = (req, res) => {
 
   //get params
   const id = req.params.id
+
   //create query with placeholder
   const query = `DELETE FROM posts WHERE id = ?`
+
   //send query
   connection.query(query, [id], (err, results) => {
-    //control if there is the element. If there is not the element, return 404
+
     if(err) return res.json({Error: err})
+
+    //control if there is the element. If there is not the element, return 404
     if(results.affectedRows === 0) return res.status(404).json({Error: "404 Not Found"})
-      //return status(204) and an empty response  
-      res.status(204).json("Element removed")
+    
+    //return status(204) and an empty response  
+    res.status(204).json("Element removed")
   })
 
 }
@@ -132,7 +133,7 @@ const destroy = (req, res) => {
 module.exports ={
   index, 
   show,
-  printByTag,
+  // printByTag,
   store,
   update,
   destroy
