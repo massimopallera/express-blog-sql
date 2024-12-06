@@ -4,13 +4,13 @@ const postsController = require('../Controllers/postsController.js')
 
 router.get('/', postsController.index)
 
-router.get('/:slug', postsController.show)
+router.get('/:id', postsController.show)
 
 router.get('/:tag', postsController.printByTag)
 
 router.post('/', postsController.store)
 
-router.put('/:slug', postsController.update)
+router.put('/:id', postsController.update)
 
 router.delete('/:id', postsController.destroy)
 
