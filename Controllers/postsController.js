@@ -99,7 +99,28 @@ const update = (req,res) => {
   
 }
 
-const destroy = (req,res) => {
+
+const destroy = (req, res) => {
+
+  //get params
+  const id = req.params.id
+  //create query with placeholder
+  const query = `DELETE FROM posts WHERE id = ?`
+  //send query
+  connection.query(query, [id], (err, results) => {
+    //control if there is the element. If there is not the element, return 404
+    if(err) return res.json({Error: err})
+    if(results.affectedRows === 0) return res.status(404).json({Error: "404 Not Found"})
+      //return status(204) and an empty response  
+      res.status(204).json("Element removed")
+  })
+
+}
+
+
+
+//Old Destroy without db
+/* const destroy = (req,res) => {
   const slug = req.params.slug.toLowerCase()
 
   const post = posts.find(post => post.slug.toLowerCase() === slug)
@@ -118,9 +139,9 @@ const destroy = (req,res) => {
     "status" : "200 OK",
     "data" : posts,
     "count": posts.length
-  })
-
+  })  
 }
+*/
 
 module.exports ={
   index, 
