@@ -18,7 +18,18 @@ const show = (req,res) => {
   //get params
   const id = req.params.id
   //make query
-  const query = `SELECT * FROM posts WHERE ID = ?`
+  // const query = `SELECT * FROM posts WHERE ID = ?` //return just posts
+
+  const query = `
+  SELECT p.*, GROUP_CONCAT(t.label SEPARATOR ',') AS tags
+  FROM post_tag AS pt  
+  JOIN tags AS t ON pt.tag_id = t.id
+  JOIN posts AS p ON pt.post_id = p.id
+  WHERE p.id = ?
+  GROUP BY pt.post_id
+  ` 
+
+
   //send query
   connection.query(query, [id], (err, results) =>{
 
