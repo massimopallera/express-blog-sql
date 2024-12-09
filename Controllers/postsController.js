@@ -1,6 +1,6 @@
 // const posts = require('../db/posts.js') // old database
 // const fs = require('fs') //to manipulate system files //With sql-db is not necessary
-const connection = require('../db/connection.js')
+import connection from '../db/connection.js'
 
 const index = (req,res) => {
 
@@ -62,7 +62,7 @@ const store =(req,res) => {
   posts.push(toStore) 
   
   //rewrite and update the "database"
-  fs.writeFileSync('./db/posts.js',`module.exports=${JSON.stringify(posts,null,2)}`)
+  fs.writeFileSync('./db/posts.js',`export default ${JSON.stringify(posts,null,2)}`)
 
   res.status(200).json({posts})
 }
@@ -98,7 +98,7 @@ const update = (req,res) => {
   }
 
   //rewrtie the "database" and update it
-  fs.writeFileSync('./db/posts.js', `module.exports=${JSON.stringify(posts,null,2)}`)
+  fs.writeFileSync('./db/posts.js', `export default ${JSON.stringify(posts,null,2)}`)
 
   // return to client the new Object
   return res.status(200).json({
@@ -130,7 +130,7 @@ const destroy = (req, res) => {
 
 }
 
-module.exports ={
+export default {
   index, 
   show,
   // printByTag,

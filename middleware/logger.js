@@ -1,6 +1,8 @@
+import chalk from 'chalk';
+
 const logger =  (req,res, next) => {
-  console.warn(`${req.method} request to ${req.baseUrl}. Time: [${new Date().toString()}]`);
+  console.log(chalk.yellow(`${req.method} request to ${req.baseUrl}. Time: [${new Date().toString()}]`));
   next()
 }
 
-module.exports = logger
+export default  logger

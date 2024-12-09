@@ -1,19 +1,16 @@
-const express = require('express')
-const cors = require('cors')
-
-const tags = require('./db/tags.js')
-const categories = require('./db/categories.js')
+import express from 'express'
+import cors from 'cors'
 
 const app = express()
 const HOST = process.env.HOST || "http://127.0.0.1"
 const PORT = process.env.PORT || 3000 || 3001
 
 // 📌 middlewares
-const logger = require('./middleware/logger.js')
-const notFound = require('./middleware/notFound.js')
+import logger from './middleware/logger.js'
+import notFound from './middleware/notFound.js'
 
 // 📌 routes
-const postsRouter = require('./routes/posts.js')
+import postsRouter from './routes/posts.js'
 
 app.use(express.json())
 app.use(cors())
@@ -38,7 +35,8 @@ app.listen(PORT, () => {
 app.use('/posts', logger)
 app.use('/posts', postsRouter)
 
-app.get('/tags', (req, res) => { 
+//tags and categories
+/* app.get('/tags', (req, res) => { 
   res.status(200).json({
     tags
   })
@@ -47,7 +45,7 @@ app.get('/categories', (req, res) => {
   res.status(200).json({
     categories
   })
-})
+}) */
 
 app.use(notFound)
 
