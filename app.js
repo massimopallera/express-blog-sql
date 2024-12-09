@@ -1,9 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-
-const app = express()
-const HOST = process.env.HOST || "http://127.0.0.1"
-const PORT = process.env.PORT || 3000 || 3001
+import chalk from 'chalk'
 
 // 📌 middlewares
 import logger from './middleware/logger.js'
@@ -12,19 +9,25 @@ import notFound from './middleware/notFound.js'
 // 📌 routes
 import postsRouter from './routes/posts.js'
 
+
+const HOST = process.env.HOST || "http://127.0.0.1"
+const PORT = process.env.PORT || 3000 || 3001
+
+
+const app = express()
 app.use(express.json())
 app.use(cors())
 
 
 //Create a Server Error to test Server Error Handling
 // app.use((req, res, next) => {
-//   throw new Error('Try Server Error Handling')
+//   throw new Error('Throwing Manual Error')
 // })
   
 app.use(express.static('public'))
 
 app.listen(PORT, () => {
-  console.log(`Server listening on ${HOST}:${PORT}`);
+  console.log(chalk.greenBright(`Server listening on ${HOST}:${PORT}`));
 })
 
 // Home Page
@@ -34,18 +37,6 @@ app.listen(PORT, () => {
 
 app.use('/posts', logger)
 app.use('/posts', postsRouter)
-
-//tags and categories
-/* app.get('/tags', (req, res) => { 
-  res.status(200).json({
-    tags
-  })
-})
-app.get('/categories', (req, res) => { 
-  res.status(200).json({
-    categories
-  })
-}) */
 
 app.use(notFound)
 
