@@ -1,6 +1,7 @@
 import express from 'express'
-const router = express.Router()
 import postsController from '../Controllers/postsController.js'
+
+const router = express.Router()
 
 router.get('/', postsController.index)
 
